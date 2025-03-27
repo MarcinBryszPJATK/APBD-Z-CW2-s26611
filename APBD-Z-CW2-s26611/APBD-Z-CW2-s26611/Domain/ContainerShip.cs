@@ -4,7 +4,7 @@ namespace APBD_Z_CW2_s26611.Domain;
 
 public class ContainerShip(double maxSpeed, double maxContainerNumber, double maxContainerWeights)
 {
-    List<Container> Containers = new List<Container>();
+    public List<Container> Containers = new List<Container>();
 
     double MaxSpeed {get; set; } = maxSpeed;
     double MaxContainerNumber {get; set; } = maxContainerNumber;
@@ -20,9 +20,11 @@ public class ContainerShip(double maxSpeed, double maxContainerNumber, double ma
         
         Containers.Add(container);
         
+        container.Ship = this;
+        
     }
     
-    public void addContainers(List<Container> ContainersList)
+    public void AddContainers(List<Container> ContainersList)
     {
         if (Containers.Count + ContainersList.Count  > MaxContainerNumber)
             throw new OverfillException($"Kontenerowiec jest juz przepelniony, posiada maksymalna liczbe kontenerow wynoszaca: {MaxContainerNumber}");
@@ -31,7 +33,11 @@ public class ContainerShip(double maxSpeed, double maxContainerNumber, double ma
             throw new OverfillException($"Kontenerowiec jest juz przepelniony, posiada maksymalna wage: {MaxContainerWeights}");
         
         Containers.AddRange(ContainersList);
-        
+
+        foreach (var Container in ContainersList)
+        {
+            Container.Ship = this;
+        }
     }
 
     private double GetAllContainersWeights(Container incomingContainer)
@@ -59,7 +65,7 @@ public class ContainerShip(double maxSpeed, double maxContainerNumber, double ma
         return result;
     }
 
-    public void SwitchContainer(Container Container)
+    public void ChangeContainer(Container Container)
     {
         int index = Containers.FindIndex(c => c.Name == Container.Name);
 
@@ -73,6 +79,20 @@ public class ContainerShip(double maxSpeed, double maxContainerNumber, double ma
         }
 
     }
+    
+    public void RemoveContainer(Container container)
+    {
+        if (Containers.Remove(container))
+        {
+            container.Ship = null;
+            Console.WriteLine($"Kontener {container.Name} został usunięty ze statku.");
+        }
+        else
+        {
+            Console.WriteLine($"Kontener {container.Name} nie został znaleziony na statku.");
+        }
+    }
+
 
     public override string ToString()
     {

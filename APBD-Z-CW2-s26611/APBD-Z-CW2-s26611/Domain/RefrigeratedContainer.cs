@@ -3,11 +3,12 @@ using APBD_Z_CW2_s26611.Exceptions;
 
 namespace APBD_Z_CW2_s26611.Domain;
 
-public class RefrigeratedContainer(double height, double weight, double depth, string name, double maxLoadWeights, ProductType productType, double temperature) : Container(height, weight, depth, name, maxLoadWeights)
+public class RefrigeratedContainer(double height, double weight, double depth, double maxLoadWeights, ProductType productType) : Container(height, weight, depth, maxLoadWeights)
 {
     public ProductType ProductType { get; protected set; } = productType;
-
-    private double _temperature = temperature;
+    protected override string ContainerExtension => "C";
+    
+    private double _temperature = TemperatureDict[productType];
     public double Temperature
     {
         get => _temperature;

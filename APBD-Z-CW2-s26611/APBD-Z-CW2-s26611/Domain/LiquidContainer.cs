@@ -3,9 +3,10 @@
 namespace APBD_Z_CW2_s26611.Domain;
 using APBD_Z_CW2_s26611.doubleerfaces;
 using APBD_Z_CW2_s26611.ENUMS;
-public class LiquidContainer(double height, double weight, double depth, string name, double maxLoadWeights, CargoType cargoType) : Container(height, weight, depth, name, maxLoadWeights), IHazardNotifier
+public class LiquidContainer(double height, double weight, double depth, double maxLoadWeights, CargoType cargoType) : Container(height, weight, depth, maxLoadWeights), IHazardNotifier
 {
     public CargoType CargoType { get; private set; } = cargoType;
+    protected override string ContainerExtension => "L";
     public void Notify(string message, string cargoName)
     {
         Console.WriteLine(message);
@@ -25,7 +26,7 @@ public class LiquidContainer(double height, double weight, double depth, string 
         {
             Notify(
                 $"Ładunek jest {cargoDescription}, więc masa nie może przekraczać {limitFactor * 100}% maksymalnego załadunku.",
-                name);
+                Name);
 
             throw new OverfillException($"Ładunek jest {cargoDescription}, więc masa nie może przekraczać {limitFactor * 100}% maksymalnego załadunku.");
         }
